@@ -1,29 +1,31 @@
 import React from "react";
-import Bouquet from "../components/Bouquet";
 
-const Bouquets = ({ bouquets = [], onLike }) => {
-  console.log("Bouquets reçus dans le composant Bouquets:", bouquets); // Debug log
-
-  if (!bouquets || bouquets.length === 0) {
-    return (
-      <div className="container">
-        <div className="alert alert-info">Chargement des bouquets...</div>
-      </div>
-    );
-  }
-
+const Bouquet = ({ bouquet, onLike }) => {
   return (
-    <div className="container">
-      <h2 className="mb-4">Nos Bouquets</h2>
-      <div className="row">
-        {bouquets.map((bouquet) => (
-          <div className="col-md-4 mb-4" key={bouquet.id}>
-            <Bouquet bouquet={bouquet} onLike={onLike} />
-          </div>
-        ))}
+    <div className="card h-100">
+      <img
+        src={bouquet.image}
+        className="card-img-top"
+        alt={bouquet.nom}
+        style={{ height: "full", objectFit: "cover" }}
+      />
+      <div className="card-body">
+        <h5 className="card-title">{bouquet.nom}</h5>
+        <p className="card-text">{bouquet.descr}</p>
+        <p className="card-text">
+          <strong>Prix: {bouquet.prix.toFixed(2)} €</strong>
+        </p>
+        <button
+          className={`btn ${
+            bouquet.liked ? "btn-danger" : "btn-outline-danger"
+          }`}
+          onClick={() => onLike(bouquet.id)}
+        >
+          {bouquet.liked ? "❤️ Liked" : "🤍 Like"}
+        </button>
       </div>
     </div>
   );
 };
 
-export default Bouquets;
+export default Bouquet;

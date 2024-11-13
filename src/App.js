@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Bouquets from "./pages/Bouquets";
 import Fleurs from "./pages/Fleurs";
 import MonCompte from "./pages/MonCompte";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function App() {
   const [bouquets, setBouquets] = useState([
@@ -37,44 +35,13 @@ function App() {
     },
   ]);
 
-  const handleLike = async (id) => {
-    const updatedBouquets = bouquets.map((bouquet) =>
-      bouquet.id === id ? { ...bouquet, liked: !bouquet.liked } : bouquet
+  const handleLike = (id) => {
+    setBouquets(
+      bouquets.map((bouquet) =>
+        bouquet.id === id ? { ...bouquet, liked: !bouquet.liked } : bouquet
+      )
     );
-    setBouquets(updatedBouquets);
-
-    try {
-      const response = await fetch(`http://localhost:3001/api/like?id=${id}`, {
-        method: "POST",
-      });
-      if (!response.ok) {
-        throw new Error("Erreur lors du like");
-      }
-    } catch (error) {
-      console.error("Erreur:", error);
-    }
   };
-
-  useEffect(() => {
-    const fetchBouquets = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/bouquets");
-        if (response.ok) {
-          const data = await response.json();
-          localStorage.setItem("bouquets", JSON.stringify(data));
-          setBouquets(data);
-        }
-      } catch (error) {
-        console.error("Erreur:", error);
-        const storedBouquets = localStorage.getItem("bouquets");
-        if (storedBouquets) {
-          setBouquets(JSON.parse(storedBouquets));
-        }
-      }
-    };
-
-    fetchBouquets();
-  }, []);
 
   return (
     <Router>

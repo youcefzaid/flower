@@ -11,7 +11,7 @@ const bouquets = [
     id: 1,
     nom: "Bouquet de Tunis",
     descr: "Un dosage parfait de jasmins et de tulipes",
-    image: "/images/1.jpg",
+    image: "/public/images/1.jpg",
     prix: 1500.0,
     liked: false,
   },
