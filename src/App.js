@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
@@ -7,40 +7,36 @@ import Fleurs from "./pages/Fleurs";
 import MonCompte from "./pages/MonCompte";
 
 function App() {
-  const [bouquets, setBouquets] = useState([
-    {
-      id: 1,
-      nom: "Bouquet de Tunis",
-      descr: "Un dosage parfait de jasmins et de tulipes",
-      image: "/images/1.jpg",
-      prix: 1500.0,
-      liked: false,
-    },
-    {
-      id: 2,
-      nom: "Bouquet d'Alger",
-      descr:
-        "Un mélange merveilleux de jasmins et de senteurs méditerranéennes",
-      image: "/images/1.jpg",
-      prix: 2000.0,
-      liked: false,
-    },
-    {
-      id: 3,
-      nom: "Bouquet d'Oran",
-      descr: "Un mélange merveilleux de roses et de lys",
-      image: "/images/1.jpg",
-      prix: 2000.0,
-      liked: false,
-    },
-  ]);
+  const [bouquets, setBouquets] = useState([]);
 
-  const handleLike = (id) => {
-    setBouquets(
-      bouquets.map((bouquet) =>
-        bouquet.id === id ? { ...bouquet, liked: !bouquet.liked } : bouquet
-      )
-    );
+  const fetchBouquets = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/bouquets");
+      const data = await response.json();
+      localStorage.setItem("boquet", JSON.stringify(data));
+      setBouquets(data);
+    } catch (error) {
+      console.error("Error fetching bouquets:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBouquets();
+  }, []);
+
+  const handleLike = async (id) => {
+    try {
+      await fetch(`http://localhost:3001/api/like?id=${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+
+      await fetchBouquets();
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
   };
 
   return (

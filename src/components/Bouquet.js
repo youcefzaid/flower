@@ -13,7 +13,7 @@ const Bouquet = ({ bouquet, onLike }) => {
         <h5 className="card-title">{bouquet.nom}</h5>
         <p className="card-text">{bouquet.descr}</p>
         <p className="card-text">
-          <strong>Prix: {bouquet.prix.toFixed(2)} €</strong>
+          <strong>Prix: {bouquet.prix} €</strong>
         </p>
         <button
           className={`btn ${

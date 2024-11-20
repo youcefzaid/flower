@@ -11,8 +11,24 @@ const bouquets = [
     id: 1,
     nom: "Bouquet de Tunis",
     descr: "Un dosage parfait de jasmins et de tulipes",
-    image: "/public/images/1.jpg",
+    image: "/images/1.jpg",
     prix: 1500.0,
+    liked: false,
+  },
+  {
+    id: 2,
+    nom: "Bouquet d'Alger",
+    descr: "Un mélange merveilleux de jasmins et de senteurs méditerranéennes",
+    image: "/images/1.jpg",
+    prix: 2000.0,
+    liked: false,
+  },
+  {
+    id: 3,
+    nom: "Bouquet d'Oran",
+    descr: "Un mélange merveilleux de roses et de lys",
+    image: "/images/1.jpg",
+    prix: 2000.0,
     liked: false,
   },
 ];
@@ -21,9 +37,12 @@ app.get("/api/bouquets", (req, res) => {
   res.json(bouquets);
 });
 
-app.post("/api/like", (req, res) => {
+app.patch("/api/like", (req, res) => {
   const { id } = req.query;
   const bouquet = bouquets.find((b) => b.id === parseInt(id));
+
+  console.log("id", id);
+  console.log("id", bouquet);
 
   if (!bouquet) {
     return res.status(404).json({ message: "Bouquet non trouvé" });
