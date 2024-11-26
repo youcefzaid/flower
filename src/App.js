@@ -5,35 +5,34 @@ import Home from "./pages/Home";
 import Bouquets from "./pages/Bouquets";
 import Fleurs from "./pages/Fleurs";
 import MonCompte from "./pages/MonCompte";
+import BouquetLoader from "./services/BouquetLoader";
 
 function App() {
   const [bouquets, setBouquets] = useState([]);
 
-  const fetchBouquets = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/api/bouquets");
-      const data = await response.json();
-      localStorage.setItem("boquet", JSON.stringify(data));
-      setBouquets(data);
-    } catch (error) {
-      console.error("Error fetching bouquets:", error);
-    }
-  };
-
   useEffect(() => {
-    fetchBouquets();
+    const storedBouquets = localStorage.getItem("bouquets");
+    if (storedBouquets) {
+      setBouquets(JSON.parse(storedBouquets));
+    }
   }, []);
 
   const handleLike = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/like?id=${id}`, {
+      const response = await fetch(`http://localhost:3001/api/like?id=${id}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
         },
       });
 
-      await fetchBouquets();
+      const { bouquet } = await response.json();
+
+      const updatedBouquets = bouquets.map((b) =>
+        b.id === bouquet.id ? bouquet : b
+      );
+      setBouquets(updatedBouquets);
+      localStorage.setItem("bouquets", JSON.stringify(updatedBouquets));
     } catch (error) {
       console.error("Error updating like:", error);
     }
@@ -54,6 +53,7 @@ function App() {
           <Route path="/moncompte" element={<MonCompte />} />
         </Routes>
       </div>
+      <BouquetLoader setBouquets={setBouquets} />
     </Router>
   );
 }

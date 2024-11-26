@@ -41,9 +41,6 @@ app.patch("/api/like", (req, res) => {
   const { id } = req.query;
   const bouquet = bouquets.find((b) => b.id === parseInt(id));
 
-  console.log("id", id);
-  console.log("id", bouquet);
-
   if (!bouquet) {
     return res.status(404).json({ message: "Bouquet non trouvé" });
   }
