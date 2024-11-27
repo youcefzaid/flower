@@ -6,6 +6,9 @@ import Bouquets from "./pages/Bouquets";
 import Fleurs from "./pages/Fleurs";
 import MonCompte from "./pages/MonCompte";
 import BouquetLoader from "./services/BouquetLoader";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+import Cart from "./components/Cart";
 
 function App() {
   const [bouquets, setBouquets] = useState([]);
@@ -39,22 +42,25 @@ function App() {
   };
 
   return (
-    <Router>
-      <NavBar />
-      <div className="container mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route
-            path="/bouquets"
-            element={<Bouquets bouquets={bouquets} onLike={handleLike} />}
-          />
-          <Route path="/fleurs" element={<Fleurs />} />
-          <Route path="/moncompte" element={<MonCompte />} />
-        </Routes>
-      </div>
-      <BouquetLoader setBouquets={setBouquets} />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <NavBar />
+        <div className="container mt-4">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
+            <Route
+              path="/bouquets"
+              element={<Bouquets bouquets={bouquets} onLike={handleLike} />}
+            />
+            <Route path="/fleurs" element={<Fleurs />} />
+            <Route path="/moncompte" element={<MonCompte />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
+        </div>
+        <BouquetLoader setBouquets={setBouquets} />
+      </Router>
+    </Provider>
   );
 }
 

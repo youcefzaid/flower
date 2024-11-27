@@ -33,6 +33,8 @@ const bouquets = [
   },
 ];
 
+const purchases = [];
+
 app.get("/api/bouquets", (req, res) => {
   res.json(bouquets);
 });
@@ -47,6 +49,31 @@ app.patch("/api/like", (req, res) => {
 
   bouquet.liked = !bouquet.liked;
   res.json({ success: true, bouquet });
+});
+
+app.post("/api/purchase", (req, res) => {
+  const { userId, items } = req.body;
+
+  if (!userId || !items || !Array.isArray(items)) {
+    return res.status(400).json({ message: "Invalid request data" });
+  }
+
+  const purchase = {
+    id: purchases.length + 1,
+    userId,
+    items,
+    totalAmount: items.reduce((sum, item) => sum + item.prix, 0),
+    date: new Date(),
+  };
+
+  purchases.push(purchase);
+  res.status(201).json({ success: true, purchase });
+});
+
+app.get("/api/purchases/:userId", (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const userPurchases = purchases.filter((p) => p.userId === userId);
+  res.json(userPurchases);
 });
 
 app.listen(port, () => {

@@ -7,6 +7,7 @@ const NavBar = () => {
     { url: "/bouquets", label: "Bouquets" },
     { url: "/fleurs", label: "Fleurs" },
     { url: "/moncompte", label: "Mon Compte" },
+    { url: "/cart", label: "Panier" },
   ];
 
   return (
